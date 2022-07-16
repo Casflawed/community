@@ -1,0 +1,28 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /community
+spring:
+  thymeleaf:
+    cache: false  #关闭模板引擎的缓存，页面存在缓存会对开发效率造成印象
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/community?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai #useSSL=false，不启用安全连接
+    username: root
+    password: ww2711554770
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      idle-timeout: 30000
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.flameking.community.entity
+  configuration:
+    use-generated-keys: true
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.flameking.community.mapper: debug
