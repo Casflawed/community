@@ -2,6 +2,9 @@ server:
   port: 8080
   servlet:
     context-path: /community
+    encoding:
+      force-response: true  #配置响应编码，避免中文乱码
+
 spring:
   thymeleaf:
     cache: false  #关闭模板引擎的缓存，页面存在缓存会对开发效率造成印象
@@ -18,11 +21,14 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.flameking.community.entity
   configuration:
     use-generated-keys: true
     map-underscore-to-camel-case: true
+  type-aliases-package: com.flameking.community.entity
 
 logging:
   level:
-    com.flameking.community.mapper: debug
+    com.flameking.community: debug
+
+
+

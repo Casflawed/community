@@ -1,0 +1,11 @@
+/*分页条居中显示*/
+.pagination-box{
+    height: 50px;
+    position: relative;
+}
+.layui-laypage-pagination{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
