@@ -32,7 +32,7 @@ public class MailClient {
       helper.setFrom(from);
       helper.setTo(to);
       helper.setSubject(subject);
-      helper.setText(content, true);                          //开启html解析，这样thymeleaf模板发送邮件了
+      helper.setText(content, true);                          //开启html解析，这样就可以通过thymeleaf模板发送html邮件了
       mailSender.send(helper.getMimeMessage());                     //发送邮件
       log.debug("发送邮件成功");
 

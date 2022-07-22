@@ -32,15 +32,19 @@ spring:
           starttls:
             enable: true
             required: true
-          ssl:                      #开启ssl安全连接
+          ssl:                                          #开启ssl安全连接
             enable: true
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
-    use-generated-keys: true
+    use-generated-keys: true                            #插入语句时，mybatis会自动获取到自动生成的id并注入到Bean中
     map-underscore-to-camel-case: true
   type-aliases-package: com.flameking.community.entity
+
+community:
+  path:
+    domain: http://localhost:8080
 
 
 

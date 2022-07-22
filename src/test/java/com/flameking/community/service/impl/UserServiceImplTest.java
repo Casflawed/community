@@ -17,7 +17,7 @@ public class UserServiceImplTest {
 
   @Test
   public void testSelectUserById(){
-    log.debug("User:{}", userService.selectUserById(1).toString());
+    log.debug("User:{}", userService.findUserById(1).toString());
   }
 
 

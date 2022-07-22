@@ -42,7 +42,7 @@ public class HomeController {
     for (DiscussPost discussPost : discussPostPageInfo.getList()) {       //初始化帖子与用户的映射关系
       HashMap<String, Object> map = new HashMap<>();
 
-      User user = userService.selectUserById(discussPost.getUserId());
+      User user = userService.findUserById(discussPost.getUserId());
       map.put("user", user);
       map.put("post", discussPost);
 
