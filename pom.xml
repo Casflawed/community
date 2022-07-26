@@ -40,6 +40,14 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!--验证码生成器-->
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
+
         <!--数据库依赖-->
         <dependency>
             <groupId>mysql</groupId>
