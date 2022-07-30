@@ -1,5 +1,6 @@
 package com.flameking.community.controller;
 
+import com.flameking.community.pojo.LoginDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
@@ -30,6 +31,10 @@ public class GlobalExceptionHandler {
 
       model.addAttribute(field, defaultMessage);
       log.debug("错误字段：[{}], 错误值：[{}], 原因：[{}]", field, rejectedValue, defaultMessage);
+    }
+
+    if (bindingResult.getTarget() instanceof LoginDTO){
+      return "/site/login";
     }
 
     return "/site/register";

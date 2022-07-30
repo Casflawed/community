@@ -1,7 +1,9 @@
 package com.flameking.community.service.impl;
 
+import com.flameking.community.entity.LoginTicket;
 import com.flameking.community.entity.User;
 import com.flameking.community.entity.UserExample;
+import com.flameking.community.mapper.LoginTicketMapper;
 import com.flameking.community.mapper.UserMapper;
 import com.flameking.community.service.UserService;
 import com.flameking.community.support.CommunityConstant;
@@ -20,7 +22,8 @@ import java.util.*;
 public class UserServiceImpl implements UserService, CommunityConstant {
   @Autowired
   private UserMapper userMapper;
-
+  @Autowired
+  private LoginTicketMapper loginTicketMapper;
   @Autowired
   private MailClient mailClient;            //邮件客户端
 
@@ -53,12 +56,32 @@ public class UserServiceImpl implements UserService, CommunityConstant {
     return userMapper.selectByExample(userExample);
   }
 
-  /**
-   * 注册用户信息
-   *
-   * @param user
-   * @return errorMap的size=0，用户信息可以注册，否则用户信息已被注册
-   */
+  @Override
+  public Map<String, String> login(String username, String password, int expiredSeconds) {
+    HashMap<String, String> map = new HashMap<>();
+    List<User> userList = findUserByUsername(username);
+    if (userList.isEmpty()) {                            //用户名不存在
+      map.put("username", "用户名错误");
+      return map;
+    }
+    User user = userList.get(0);
+    if (!Objects.equals(CommunityUtil.md5(password), user.getPassword())) {               //密码正确、登录成功，生成登录凭证
+      map.put("password", "密码错误");
+      return map;
+    }
+
+    LoginTicket loginTicket = new LoginTicket();
+    loginTicket.setUserId(user.getId());
+    loginTicket.setTicket(CommunityUtil.generateUUID());
+    loginTicket.setStatus(0);                                                             //生成有效的登录凭证
+    loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));        //过期时间换算成秒
+
+    loginTicketMapper.insert(loginTicket);
+    map.put("ticket", loginTicket.getTicket());
+    return map;
+  }
+
+
   @Override
   public Map<String, String> register(User user) {
     if (user == null) {
@@ -99,19 +122,20 @@ public class UserServiceImpl implements UserService, CommunityConstant {
     return map;
   }
 
+
   @Override
   public int activation(Integer id, String activeCode) {
     User user = userMapper.selectByPrimaryKey(id);
     if (user != null) {
-       if (user.getStatus() == 1){                                                    //重复激活
-         return ACTIVATION_REPEAT;
-       }else if (Objects.equals(activeCode, user.getActivationCode())){               //激活成功
-         user.setStatus(1);
-         userMapper.updateByPrimaryKey(user);
-         return ACTIVATION_SUCCESS;
-       }else{                                                                         //激活失败
-         return ACTIVATION_FAILURE;
-       }
+      if (user.getStatus() == 1) {                                                    //重复激活
+        return ACTIVATION_REPEAT;
+      } else if (Objects.equals(activeCode, user.getActivationCode())) {               //激活成功
+        user.setStatus(1);
+        userMapper.updateByPrimaryKey(user);
+        return ACTIVATION_SUCCESS;
+      } else {                                                                         //激活失败
+        return ACTIVATION_FAILURE;
+      }
     }
     return ACTIVATION_FAILURE;
   }

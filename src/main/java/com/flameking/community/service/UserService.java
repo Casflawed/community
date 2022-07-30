@@ -18,8 +18,9 @@ public interface UserService {
 
   /**
    * 注册用户信息
+   *
    * @param user
-   * @return
+   * @return errorMap的size=0，用户信息可以注册，否则用户信息已被注册
    */
   Map<String, String> register(@Valid User user);
 
@@ -32,5 +33,20 @@ public interface UserService {
 
   List<User> findUserByEmail(String email);
 
+  /**
+   * 登录，expired用户生成登录凭证的过期时间
+   * @param username
+   * @param password
+   * @param expiredSeconds 过期时间
+   * @return
+   */
+  Map<String, String> login(String username, String password, int expiredSeconds);
+
+  /**
+   * 激活账户
+   * @param id
+   * @param activeCode
+   * @return
+   */
   int activation(Integer id, String activeCode);
 }
