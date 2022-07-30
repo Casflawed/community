@@ -2,39 +2,41 @@ package com.flameking.community.controller;
 
 import com.flameking.community.mapper.UserMapper;
 import com.flameking.community.pojo.LoginDTO;
+import com.flameking.community.service.LoginTicketService;
 import com.flameking.community.service.UserService;
 import com.flameking.community.support.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Map;
-import java.util.Objects;
 
 @Controller
-@RequestMapping("/login")
 public class LoginController implements CommunityConstant {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private LoginTicketService loginTicketService;
+
   @Value("${server.servlet.context-path}")
   private String contextPath;
 
-  @GetMapping("/page")
+  @GetMapping("/login/page")
   public String getLoginPage(Model model) {
 
     return "site/login";
   }
 
-  @PostMapping
+  @PostMapping("/login")
   public String login(Model model, @Valid LoginDTO loginDTO, HttpSession session, HttpServletResponse response) {
     if (!loginDTO.getVerifycode().equalsIgnoreCase(session.getAttribute("kaptcha").toString())) {
       model.addAttribute("verifycode", "验证码错误");
@@ -55,5 +57,11 @@ public class LoginController implements CommunityConstant {
       return "site/login";
     }
 
+  }
+
+  @GetMapping("/logout")
+  public String logout(@CookieValue("ticket") String ticket){
+    loginTicketService.logout(ticket);
+    return "redirect:/login/page";
   }
 }
