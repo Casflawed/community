@@ -7,8 +7,8 @@ import com.flameking.community.mapper.LoginTicketMapper;
 import com.flameking.community.mapper.UserMapper;
 import com.flameking.community.service.UserService;
 import com.flameking.community.support.CommunityConstant;
-import com.flameking.community.utils.CommunityUtil;
-import com.flameking.community.utils.MailClient;
+import com.flameking.community.util.CommunityUtils;
+import com.flameking.community.util.MailClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -65,14 +65,14 @@ public class UserServiceImpl implements UserService, CommunityConstant {
       return map;
     }
     User user = userList.get(0);
-    if (!Objects.equals(CommunityUtil.md5(password), user.getPassword())) {               //密码正确、登录成功，生成登录凭证
+    if (!Objects.equals(CommunityUtils.md5(password), user.getPassword())) {               //密码正确、登录成功，生成登录凭证
       map.put("password", "密码错误");
       return map;
     }
 
     LoginTicket loginTicket = new LoginTicket();
     loginTicket.setUserId(user.getId());
-    loginTicket.setTicket(CommunityUtil.generateUUID());
+    loginTicket.setTicket(CommunityUtils.generateUUID());
     loginTicket.setStatus(0);                                                             //生成有效的登录凭证
     loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));        //过期时间换算成秒
 
@@ -100,12 +100,12 @@ public class UserServiceImpl implements UserService, CommunityConstant {
     }
 
     if (map.isEmpty()) {                                                                     //用户信息可以注册
-      user.setSalt(CommunityUtil.generateUUID().substring(0, 5));
-      user.setPassword(CommunityUtil.md5(user.getPassword() + user.getSalt()));         //对密码加密，密码+盐值：提高安全性
+      user.setSalt(CommunityUtils.generateUUID().substring(0, 5));
+      user.setPassword(CommunityUtils.md5(user.getPassword() + user.getSalt()));         //对密码加密，密码+盐值：提高安全性
 
       user.setType(0);
       user.setStatus(0);
-      user.setActivationCode(CommunityUtil.generateUUID());
+      user.setActivationCode(CommunityUtils.generateUUID());
       user.setHeaderUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));                                          //随机头像
       user.setCreateTime(new Date());
       userMapper.insert(user);
@@ -138,6 +138,12 @@ public class UserServiceImpl implements UserService, CommunityConstant {
       }
     }
     return ACTIVATION_FAILURE;
+  }
+
+  @Override
+  public int updateHeaderUrlById(Integer id, String headerUrl) {
+    userMapper.updateHeaderUrlById(id, headerUrl);
+    return 0;
   }
 
 

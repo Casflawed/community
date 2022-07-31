@@ -42,7 +42,7 @@ public class LoginController implements CommunityConstant {
       model.addAttribute("verifycode", "验证码错误");
       return "site/login";
     }
-    int expiredSeconds = loginDTO.getRememberMe() ? EXPIREDSECONDS : DEFAULT_EXPIREDSECONDS;
+    int expiredSeconds = loginDTO.isRememberMe() ? EXPIREDSECONDS : DEFAULT_EXPIREDSECONDS;
 
     Map<String, String> map = userService.login(loginDTO.getUsername(), loginDTO.getPassword(), expiredSeconds);
     if (map.containsKey("ticket")) {                                //登录成功并且返回凭证

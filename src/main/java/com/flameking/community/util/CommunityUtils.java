@@ -1,11 +1,11 @@
-package com.flameking.community.utils;
+package com.flameking.community.util;
 
 import org.springframework.util.DigestUtils;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public class CommunityUtil {
+public class CommunityUtils {
   /**
    * 生成随机字符串
    * @return

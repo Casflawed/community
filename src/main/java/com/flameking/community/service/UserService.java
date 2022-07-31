@@ -49,4 +49,12 @@ public interface UserService {
    * @return
    */
   int activation(Integer id, String activeCode);
+
+  /**
+   * 更新用户头像url
+   * @param id          用户id
+   * @param headerUrl
+   * @return
+   */
+  int updateHeaderUrlById(Integer id, String headerUrl);
 }

@@ -1,4 +1,4 @@
-package com.flameking.community.utils;
+package com.flameking.community.util;
 
 import com.flameking.community.entity.User;
 import org.springframework.stereotype.Component;

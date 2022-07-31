@@ -4,8 +4,8 @@ import com.flameking.community.entity.LoginTicket;
 import com.flameking.community.entity.User;
 import com.flameking.community.service.LoginTicketService;
 import com.flameking.community.service.UserService;
-import com.flameking.community.utils.CookieUtil;
-import com.flameking.community.utils.HostHolder;
+import com.flameking.community.util.CookieUtils;
+import com.flameking.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -29,7 +29,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    String ticket = CookieUtil.getValue(request, "ticket");
+    String ticket = CookieUtils.getValue(request, "ticket");
     if (ticket != null) {
       List<LoginTicket> loginTicketList = loginTicketService.findLoginTicketByTicket(ticket);
       if (!loginTicketList.isEmpty()) {

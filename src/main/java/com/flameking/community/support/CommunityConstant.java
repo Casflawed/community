@@ -6,5 +6,6 @@ public interface CommunityConstant {
   int ACTIVATION_FAILURE = 2;
   int DEFAULT_EXPIREDSECONDS = 60 * 60 * 12;
   int EXPIREDSECONDS = 60 * 60 * 24;
+  double FILE_MAXSIZE = 10;
 
 }
